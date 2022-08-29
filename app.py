@@ -6,19 +6,20 @@ from urllib.request import urlopen as uReq
 
 app = Flask(__name__)
 
+# Home Route
 @app.route('/',methods=['GET'])  # route to display the home page
-@cross_origin()
+@cross_origin()                  # Not required for local deployment but required for cloud,
 def homePage():
-    return render_template("index.html")
+    return render_template("index.html")            # Rendering the form
 
 @app.route('/review',methods=['POST','GET']) # route to show the review comments in a web UI
 @cross_origin()
 def index():
     if request.method == 'POST':
         try:
-            searchString = request.form['content'].replace(" ","")
-            flipkart_url = "https://www.flipkart.com/search?q=" + searchString
-            uClient = uReq(flipkart_url)
+            searchString = request.form['content'].replace(" ","")                 # String we will get from a form
+            flipkart_url = "https://www.flipkart.com/search?q=" + searchString     # Appending string with flipkart url
+            uClient = uReq(flipkart_url)                                           
             flipkartPage = uClient.read()
             uClient.close()
             flipkart_html = bs(flipkartPage, "html.parser")
